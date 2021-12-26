@@ -1,7 +1,7 @@
-from model.main import database
+from model.main import mongo_db
 
-col_user = database['user']
+_col_user = mongo_db['user']
 
 
-def get_user_by_name(username: str):
-    return col_user.find_one({'username': username})
+def find_user_by_name(username: str):
+    return _col_user.find_one({'username': username})
