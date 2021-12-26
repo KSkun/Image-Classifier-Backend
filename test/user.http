@@ -1,0 +1,4 @@
+# @name login (get token)
+# password is base64 encoded
+GET http://localhost:5000/api/user/token?username=test&password=dGVzdA==
+Accept: application/json
