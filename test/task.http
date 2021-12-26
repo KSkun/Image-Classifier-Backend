@@ -1,0 +1,18 @@
+# @name get available search engines
+GET http://localhost:5000/api/task/engines
+Accept: application/json
+
+###
+# @name create new task
+POST http://localhost:5000/api/task
+Content-Type: application/json
+Accept: application/json’
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1MTYyMzkwMjIsImV4cCI6MTkxNjIzOTAyMiwiaWQiOiI2MWM4MDFlZjk0MGRjNjYwMWM1ZDQ3NGEifQ.xoCbXzywigS7fu0qZml2Nm1XVBDdOf7-JcxYXddyjxQ
+
+{
+  "keyword": "甘雨",
+  "engines": [
+    "baidu"
+  ],
+  "limit": 20
+}
