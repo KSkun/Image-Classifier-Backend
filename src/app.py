@@ -2,12 +2,14 @@ import logging
 import os
 
 from flask import Flask
+from flask_cors import CORS
 
 logging.basicConfig(level=logging.DEBUG)
 logger = logging.getLogger('image-classifier-backend')
 logger.info('starting Image Classifier Backend by KSkun')
 
 app = Flask(__name__)
+CORS(app, supports_credentials=True)
 
 from config import load_config
 

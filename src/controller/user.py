@@ -17,6 +17,9 @@ from model.user import *
 def user_get_token():
     username = request.args.get('username')
     password_encoded = request.args.get('password')
+    if username is None or password_encoded is None:
+        abort(response_error(HTTPStatus.BAD_REQUEST, None, 'invalid username or password'))
+        return
     try:
         password = base64.b64decode(password_encoded, validate=True)
     except binascii.Error as e:
@@ -25,7 +28,7 @@ def user_get_token():
 
     # check password
     user = find_user_by_name(username)
-    if not bcrypt.checkpw(password, user['password'].encode()):
+    if user is None or not bcrypt.checkpw(password, user['password'].encode()):
         abort(response_error(HTTPStatus.BAD_REQUEST, None, 'invalid username or password'))
         return
 
