@@ -35,11 +35,13 @@ def create_task():
             return
 
     mongo_task = task.copy()
-    mongo_task['status'] = 'pending'
+    mongo_task['spider_done'] = False
+    mongo_task['classifier_done'] = False
     task_id = insert_task(mongo_task)
 
     redis_task = task.copy()
     redis_task['operation'] = 'crawl'
+    redis_task['task_id'] = str(task_id)
     push_task(redis_task)
 
     return response_success({'_id': str(task_id)})
