@@ -8,15 +8,17 @@ from controller.main import task_bp
 from controller.response import response_success, response_error
 from model.task import *
 
-_available_engines = {
-    'baidu': '百度',
-    'google': 'Google'
-}
+_available_engines = [
+    {'name': 'baidu', 'display_name': '百度'},
+    {'name': 'google', 'display_name': 'Google'},
+]
+
+_available_engine_names = ['baidu', 'google']
 
 
 @task_bp.route('/engines', methods=['GET'])
 def get_available_engines():
-    return response_success(_available_engines)
+    return response_success({'engines': _available_engines})
 
 
 @task_bp.route('', methods=['POST'])
@@ -28,7 +30,7 @@ def create_task():
         abort(response_error(HTTPStatus.BAD_REQUEST, None, 'missing required fields'))
         return
     for engine in task['engines']:
-        if engine not in _available_engines:
+        if engine not in _available_engine_names:
             abort(response_error(HTTPStatus.BAD_REQUEST, None, 'unsupported engine name'))
             return
 
