@@ -4,27 +4,38 @@ from model.main import mongo_db, redis_client
 
 _col_task = mongo_db['task']
 
-_stream_name: str = 'spider_cmd'
-_group_name: str = 'spider'
+_spider_stream_name: str = 'spider_cmd'
+_spider_group_name: str = 'spider'
+
+_classifier_stream_name: str = 'classify_cmd'
+_classifier_group_name: str = 'classifier'
 
 
-def init_task_stream():
-    if redis_client.exists(_stream_name):
-        redis_client.delete(_stream_name)
+def init_spider_stream():
+    if redis_client.exists(_spider_stream_name):
+        redis_client.delete(_spider_stream_name)
 
-    redis_client.xadd(_stream_name, {'cmd': json.dumps({
+    redis_client.xadd(_spider_stream_name, {'cmd': json.dumps({
         'operation': 'init',
         'task_id': '',
         'keyword': '',
         'engines': [],
         'limit': 0
     })})
-    redis_client.xgroup_create(_stream_name, _group_name, 0)
+    redis_client.xgroup_create(_spider_stream_name, _spider_group_name, 0)
+
+
+def init_classifier_stream():
+    if redis_client.exists(_classifier_stream_name):
+        redis_client.delete(_classifier_stream_name)
+
+    redis_client.xadd(_classifier_stream_name, {'op': 'init'})
+    redis_client.xgroup_create(_classifier_stream_name, _classifier_group_name, 0)
 
 
 def insert_task(task):
     return _col_task.insert_one(task).inserted_id
 
 
-def push_task(task):
-    redis_client.xadd(_stream_name, {'cmd': json.dumps(task)})
+def push_spider_cmd(task):
+    redis_client.xadd(_spider_stream_name, {'cmd': json.dumps(task)})

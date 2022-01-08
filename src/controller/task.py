@@ -42,6 +42,6 @@ def create_task():
     redis_task = task.copy()
     redis_task['operation'] = 'crawl'
     redis_task['task_id'] = str(task_id)
-    push_task(redis_task)
+    push_spider_cmd(redis_task)
 
     return response_success({'_id': str(task_id)})

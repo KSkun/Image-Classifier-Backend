@@ -1,5 +1,6 @@
-from model.task import init_task_stream
+from model.task import init_spider_stream, init_classifier_stream
 
 
 def init_model():
-    init_task_stream()
+    init_spider_stream()
+    init_classifier_stream()
