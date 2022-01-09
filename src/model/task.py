@@ -45,3 +45,7 @@ def push_spider_cmd(task):
 
 def get_task_list_by_user(user_id: ObjectId):
     return list(_col_task.find({'user': user_id}))
+
+
+def get_task(id: ObjectId):
+    return _col_task.find_one({'_id': id})

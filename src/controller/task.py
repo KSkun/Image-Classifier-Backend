@@ -61,3 +61,21 @@ def get_task_list():
         task.pop('user')
         tasks.append(task)
     return response_success({'tasks': tasks})
+
+
+@task_bp.route('/<id>', methods=['GET'])
+@auth.login_required
+def get_task_info(id):
+    self_id = ObjectId(auth.current_user())
+    try:
+        task_id = ObjectId(id)
+    except Exception as e:
+        abort(response_error(HTTPStatus.BAD_REQUEST, e, 'invalid id'))
+        return
+    task = get_task(task_id)
+    if task['user'] != self_id:
+        abort(response_error(HTTPStatus.FORBIDDEN, None, 'permission denied'))
+        return
+    task.pop('user')
+    task.pop('_id')
+    return response_success(task)

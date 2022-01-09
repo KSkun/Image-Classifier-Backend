@@ -23,3 +23,10 @@ GET http://localhost:5000/api/task/list
 Content-Type: application/json
 Accept: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1MTYyMzkwMjIsImV4cCI6MTkxNjIzOTAyMiwiaWQiOiI2MWM4MDFlZjk0MGRjNjYwMWM1ZDQ3NGEifQ.xoCbXzywigS7fu0qZml2Nm1XVBDdOf7-JcxYXddyjxQ
+
+###
+# @name get task info
+GET http://localhost:5000/api/task/61d9c19e4a3ce751f5e11b14
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1MTYyMzkwMjIsImV4cCI6MTkxNjIzOTAyMiwiaWQiOiI2MWM4MDFlZjk0MGRjNjYwMWM1ZDQ3NGEifQ.xoCbXzywigS7fu0qZml2Nm1XVBDdOf7-JcxYXddyjxQ

@@ -8,7 +8,11 @@ from controller.user import *
 task_bp = Blueprint('task', __name__, url_prefix='/task')
 from controller.task import *
 
+image_bp = Blueprint('image', __name__, url_prefix='/image')
+from controller.image import *
+
 
 def init_controller():
     main_bp.register_blueprint(user_bp)
     main_bp.register_blueprint(task_bp)
+    main_bp.register_blueprint(image_bp)
