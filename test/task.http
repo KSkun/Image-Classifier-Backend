@@ -6,7 +6,7 @@ Accept: application/json
 # @name create new task
 POST http://localhost:5000/api/task
 Content-Type: application/json
-Accept: application/json’
+Accept: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1MTYyMzkwMjIsImV4cCI6MTkxNjIzOTAyMiwiaWQiOiI2MWM4MDFlZjk0MGRjNjYwMWM1ZDQ3NGEifQ.xoCbXzywigS7fu0qZml2Nm1XVBDdOf7-JcxYXddyjxQ
 
 {
@@ -16,3 +16,10 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1MTYyMzkwM
   ],
   "limit": 20
 }
+
+###
+# @name get task list
+GET http://localhost:5000/api/task/list
+Content-Type: application/json
+Accept: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpYXQiOjE1MTYyMzkwMjIsImV4cCI6MTkxNjIzOTAyMiwiaWQiOiI2MWM4MDFlZjk0MGRjNjYwMWM1ZDQ3NGEifQ.xoCbXzywigS7fu0qZml2Nm1XVBDdOf7-JcxYXddyjxQ

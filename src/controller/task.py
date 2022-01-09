@@ -1,7 +1,7 @@
 from http import HTTPStatus
+from typing import Dict, Any, List
 
 from flask import request, abort
-from typing import Dict, Any
 
 from controller.auth import auth
 from controller.main import task_bp
@@ -35,6 +35,7 @@ def create_task():
             return
 
     mongo_task = task.copy()
+    mongo_task['user'] = ObjectId(auth.current_user())
     mongo_task['spider_done'] = False
     mongo_task['classifier_done'] = False
     task_id = insert_task(mongo_task)
@@ -45,3 +46,18 @@ def create_task():
     push_spider_cmd(redis_task)
 
     return response_success({'_id': str(task_id)})
+
+
+@task_bp.route('/list', methods=['GET'])
+@auth.login_required
+def get_task_list():
+    self_id = ObjectId(auth.current_user())
+    tasks = []
+    db_tasks: List[Dict[str, object]] = get_task_list_by_user(self_id)
+    for db_task in db_tasks:
+        task = db_task.copy()
+        task['id'] = str(task['_id'])
+        task.pop('_id')
+        task.pop('user')
+        tasks.append(task)
+    return response_success({'tasks': tasks})

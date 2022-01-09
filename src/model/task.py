@@ -1,5 +1,7 @@
 import json
 
+from bson import ObjectId
+
 from model.main import mongo_db, redis_client
 
 _col_task = mongo_db['task']
@@ -39,3 +41,7 @@ def insert_task(task):
 
 def push_spider_cmd(task):
     redis_client.xadd(_spider_stream_name, {'cmd': json.dumps(task)})
+
+
+def get_task_list_by_user(user_id: ObjectId):
+    return list(_col_task.find({'user': user_id}))
