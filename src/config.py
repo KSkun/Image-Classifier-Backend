@@ -4,6 +4,9 @@ import json
 class BackendConfig:
     """Classifier backend config data class"""
 
+    host: str
+    port: int
+
     image_tmp_dir: str
     image_text_dir: str
     image_nontext_dir: str
