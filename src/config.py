@@ -4,6 +4,11 @@ import json
 class BackendConfig:
     """Classifier backend config data class"""
 
+    image_tmp_dir: str
+    image_text_dir: str
+    image_nontext_dir: str
+    image_url: str
+
     jwt_secret: str
     jwt_algorithm: str
     jwt_expire: int  # unit: minute
