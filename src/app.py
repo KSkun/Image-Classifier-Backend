@@ -11,9 +11,9 @@ logger.info('starting Image Classifier Backend by KSkun')
 app = Flask(__name__)
 CORS(app, supports_credentials=True)
 
-from config import load_config
+from config import load_config, C
 
-config_file = os.getenv('CONFIG_FILE', default='default.json')
+config_file = 'config/' + os.getenv('CONFIG_FILE', default='default.json')
 load_config(config_file)
 logger.info('config file %s loaded' % config_file)
 
@@ -27,4 +27,4 @@ init_controller()
 app.register_blueprint(main_bp)
 
 if __name__ == '__main__':
-    app.run()
+    app.run(host=C.host, port=C.port)

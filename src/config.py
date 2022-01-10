@@ -4,6 +4,9 @@ import json
 class BackendConfig:
     """Classifier backend config data class"""
 
+    host: str
+    port: int
+
     jwt_secret: str
     jwt_algorithm: str
     jwt_expire: int  # unit: minute
