@@ -1,8 +1,11 @@
+import os.path
 from http import HTTPStatus
+from shutil import make_archive
 from typing import Dict, Any, List
 
 from flask import request, abort
 
+from config import C
 from controller.auth import auth
 from controller.main import task_bp
 from controller.response import response_success, response_error
@@ -63,12 +66,12 @@ def get_task_list():
     return response_success({'tasks': tasks})
 
 
-@task_bp.route('/<id>', methods=['GET'])
+@task_bp.route('/<task_param>', methods=['GET'])
 @auth.login_required
-def get_task_info(id):
+def get_task_info(task_param):
     self_id = ObjectId(auth.current_user())
     try:
-        task_id = ObjectId(id)
+        task_id = ObjectId(task_param)
     except Exception as e:
         abort(response_error(HTTPStatus.BAD_REQUEST, e, 'invalid id'))
         return
@@ -79,3 +82,32 @@ def get_task_info(id):
     task.pop('user')
     task.pop('_id')
     return response_success(task)
+
+
+@task_bp.route('/<task_param>/zip/<klass>', methods=['GET'])
+@auth.login_required
+def get_zipped_text_images(task_param, klass):
+    if klass != 'text' and klass != 'nontext':
+        abort(response_error(HTTPStatus.BAD_REQUEST, None, 'invalid class ' + klass))
+        return
+
+    self_id = ObjectId(auth.current_user())
+    try:
+        task_id = ObjectId(task_param)
+    except Exception as e:
+        abort(response_error(HTTPStatus.BAD_REQUEST, e, 'invalid id'))
+        return
+    task = get_task(task_id)
+    if task['user'] != self_id:
+        abort(response_error(HTTPStatus.FORBIDDEN, None, 'permission denied'))
+        return
+
+    image_path = C.image_text_dir
+    if klass == 'nontext':
+        image_path = C.image_nontext_dir
+    image_path += '/' + task_param
+    file_path = C.image_tmp_dir + '/' + task_param + '/' + klass + '.zip'
+    file_url = C.image_url + '/tmp/' + task_param + '/' + klass + '.zip'
+    if not os.path.exists(file_path):
+        make_archive(C.image_tmp_dir + '/' + task_param + '/' + klass, 'zip', image_path)
+    return response_success({'file': file_url})

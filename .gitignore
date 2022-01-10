@@ -2,6 +2,10 @@
 
 .idea/
 
+workdir/tmp
+workdir/text
+workdir/nontext
+
 **/local.json
 
 ### Python template
