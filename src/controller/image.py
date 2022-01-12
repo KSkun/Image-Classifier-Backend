@@ -13,8 +13,10 @@ from model.task import get_task
 @image_bp.route('/list', methods=['GET'])
 @auth.login_required
 def get_image_list():
+    """GET /api/image/list"""
     self_id = ObjectId(auth.current_user())
 
+    # get task info
     task_id_str = request.args.get('task')
     if task_id_str is None:
         abort(response_error(HTTPStatus.BAD_REQUEST, None, 'invalid username or password'))
@@ -29,6 +31,7 @@ def get_image_list():
         abort(response_error(HTTPStatus.FORBIDDEN, None, 'permission denied'))
         return
 
+    # get image by task
     _images = find_image_list_by_task(task_id)
     images = []
     for _img in _images:

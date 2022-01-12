@@ -1,1 +1,5 @@
+test/
 workdir/config
+workdir/nontext
+workdir/text
+workdir/tmp

@@ -2,7 +2,10 @@ import json
 
 
 class BackendConfig:
-    """Classifier backend config data class"""
+    """
+    Backend config data class
+    See https://github.com/KSkun/Image-Classifier-Backend/blob/master/README.md
+    """
 
     host: str
     port: int
@@ -31,6 +34,7 @@ C = BackendConfig()
 
 
 def load_config(file_path: str):
+    """Load config fields to object C from file"""
     file = open(file_path, 'r')
     json_str = file.read()
     file.close()

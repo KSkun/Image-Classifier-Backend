@@ -15,6 +15,8 @@ from model.user import *
 
 @user_bp.route('/token', methods=['GET'])
 def user_get_token():
+    """GET /api/user/token"""
+    # validate request
     username = request.args.get('username')
     password_encoded = request.args.get('password')
     if username is None or password_encoded is None:

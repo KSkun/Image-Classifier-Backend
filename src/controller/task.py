@@ -11,24 +11,28 @@ from controller.main import task_bp
 from controller.response import response_success, response_error
 from model.task import *
 
+# engine list
 _available_engines = [
     {'name': 'baidu', 'display_name': '百度'},
     {'name': 'google', 'display_name': 'Google'},
 ]
 
+# engine name list
 _available_engine_names = ['baidu', 'google']
 
 
 @task_bp.route('/engines', methods=['GET'])
 def get_available_engines():
+    """GET /api/task/engines"""
     return response_success({'engines': _available_engines})
 
 
 @task_bp.route('', methods=['POST'])
 @auth.login_required
 def create_task():
+    """POST /api/task"""
+    # validate request
     task: Dict[str, Any] = request.get_json()
-
     if 'keyword' not in task or 'engines' not in task or 'limit' not in task:
         abort(response_error(HTTPStatus.BAD_REQUEST, None, 'missing required fields'))
         return
@@ -37,12 +41,14 @@ def create_task():
             abort(response_error(HTTPStatus.BAD_REQUEST, None, 'unsupported engine name'))
             return
 
+    # create task document in MongoDB
     mongo_task = task.copy()
     mongo_task['user'] = ObjectId(auth.current_user())
     mongo_task['spider_done'] = False
     mongo_task['classifier_done'] = False
     task_id = insert_task(mongo_task)
 
+    # create spider command for the task
     redis_task = task.copy()
     redis_task['operation'] = 'crawl'
     redis_task['task_id'] = str(task_id)
@@ -54,6 +60,7 @@ def create_task():
 @task_bp.route('/list', methods=['GET'])
 @auth.login_required
 def get_task_list():
+    """GET /api/task/list"""
     self_id = ObjectId(auth.current_user())
     tasks = []
     db_tasks: List[Dict[str, object]] = get_task_list_by_user(self_id)
@@ -69,6 +76,7 @@ def get_task_list():
 @task_bp.route('/<task_param>', methods=['GET'])
 @auth.login_required
 def get_task_info(task_param):
+    """GET /api/task/<task_param>"""
     self_id = ObjectId(auth.current_user())
     try:
         task_id = ObjectId(task_param)
@@ -87,10 +95,13 @@ def get_task_info(task_param):
 @task_bp.route('/<task_param>/zip/<klass>', methods=['GET'])
 @auth.login_required
 def get_zipped_text_images(task_param, klass):
+    """GET /api/task/<task_param>/zip/<klass>"""
+    # validate request
     if klass != 'text' and klass != 'nontext':
         abort(response_error(HTTPStatus.BAD_REQUEST, None, 'invalid class ' + klass))
         return
 
+    # check if task was created by user
     self_id = ObjectId(auth.current_user())
     try:
         task_id = ObjectId(task_param)
@@ -102,6 +113,7 @@ def get_zipped_text_images(task_param, klass):
         abort(response_error(HTTPStatus.FORBIDDEN, None, 'permission denied'))
         return
 
+    # make zip pack & return
     image_path = C.image_text_dir
     if klass == 'nontext':
         image_path = C.image_nontext_dir
